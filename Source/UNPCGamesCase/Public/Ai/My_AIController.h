@@ -13,5 +13,12 @@ UCLASS()
 class UNPCGAMESCASE_API AMy_AIController : public AAIController
 {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere , Category="AI")
+	UBehaviorTree* BehaviorTree;
 	
+
+	
+	
+	virtual void BeginPlay() override;
 };

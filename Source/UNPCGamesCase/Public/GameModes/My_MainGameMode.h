@@ -23,7 +23,13 @@ class UNPCGAMESCASE_API AMy_MainGameMode : public AGameModeBase
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AMy_AICharacter> AiClass;
 
-	FTimerHandle TimerHandle_AiSPawn;
+	FTimerHandle TimerHandle_AiSPawn;				
+
+	UPROPERTY(EditDefaultsOnly)
+	float SpawnAiSecondRange_MinValue;						//the min value for AI spawning second range 
+	
+	UPROPERTY(EditDefaultsOnly)
+	float SpawnAiSecondRange_MaxValue;						//the max value for AI spawning second range
 
 public:
 	AMy_MainGameMode();

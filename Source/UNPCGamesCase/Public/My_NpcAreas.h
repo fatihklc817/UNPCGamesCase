@@ -45,6 +45,8 @@ public:
 
 	void ACustomerArrived(AActor* ArrivedNPC);
 
+	void CurrentCustomerDoneItsTask();
+
 	int32 GetNumOfCustomersInQueue();
 
 };

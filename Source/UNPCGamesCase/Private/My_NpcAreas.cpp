@@ -51,6 +51,11 @@ void AMy_NpcAreas::ACustomerArrived(AActor* ArrivedNPC)
 	
 }
 
+void AMy_NpcAreas::CurrentCustomerDoneItsTask()
+{
+	QueueSize--;
+}
+
 int32 AMy_NpcAreas::GetNumOfCustomersInQueue()
 {
 	return QueueSize;

@@ -32,7 +32,7 @@ void AMy_MainGameMode::BeginPlay()
 			{
 				auto SpawnedActor = GetWorld()->SpawnActor<AActor>(AiClass,FVector(0,0,0),FRotator::ZeroRotator);
 			},
-			FMath::RandRange(5,10),
+			FMath::RandRange(SpawnAiSecondRange_MinValue,SpawnAiSecondRange_MaxValue),
 			true,
 			5);
 	

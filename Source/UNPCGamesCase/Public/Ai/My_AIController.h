@@ -17,8 +17,10 @@ class UNPCGAMESCASE_API AMy_AIController : public AAIController
 	UPROPERTY(EditAnywhere , Category="AI")
 	UBehaviorTree* BehaviorTree;
 	
-
-	
 	
 	virtual void BeginPlay() override;
+
+	
+public:
+	UBehaviorTree* GetBehaviourTree();
 };

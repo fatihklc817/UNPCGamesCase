@@ -16,6 +16,7 @@ AMy_NpcAreas::AMy_NpcAreas()
 	CustomerStandPoint = CreateDefaultSubobject<UArrowComponent>("CustomerStandPoint");
 	CustomerStandPoint->SetupAttachment(RootComponent);
 
+	bIsAreaBusy = false;
 	
 }
 
@@ -26,9 +27,33 @@ void AMy_NpcAreas::BeginPlay()
 	
 }
 
-FTransform AMy_NpcAreas::GetCustomerStandPoint()
+UArrowComponent* AMy_NpcAreas::GetCustomerStandPoint()
 {
-	return CustomerStandPoint->GetComponentTransform();
+	return CustomerStandPoint;
+	
+}
+
+bool AMy_NpcAreas::GetIsAreaBusy()
+{
+	return bIsAreaBusy;
+}
+
+void AMy_NpcAreas::SetIsAreaBusy(bool value)
+{
+	bIsAreaBusy = value;
+}
+
+void AMy_NpcAreas::ACustomerArrived(AActor* ArrivedNPC)
+{
+	SetIsAreaBusy(true);
+	CustomersQueue.Enqueue(ArrivedNPC);
+	QueueSize++;
+	
+}
+
+int32 AMy_NpcAreas::GetNumOfCustomersInQueue()
+{
+	return QueueSize;
 }
 
 

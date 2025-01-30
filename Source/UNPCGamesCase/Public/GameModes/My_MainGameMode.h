@@ -20,6 +20,11 @@ class UNPCGAMESCASE_API AMy_MainGameMode : public AGameModeBase
 	UPROPERTY()
 	TSubclassOf<class AMy_NpcAreas> NpcAreasClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<class AMy_AICharacter> AiClass;
+
+	FTimerHandle TimerHandle_AiSPawn;
+
 public:
 	AMy_MainGameMode();
 	

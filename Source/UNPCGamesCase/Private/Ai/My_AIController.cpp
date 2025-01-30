@@ -5,6 +5,7 @@
 
 #include "My_NpcAreas.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Components/ArrowComponent.h"
 #include "GameModes/My_MainGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -13,30 +14,35 @@ void AMy_AIController::BeginPlay()
 	Super::BeginPlay();
 
 	RunBehaviorTree(BehaviorTree);
-
-	APawn* MyPawn = UGameplayStatics::GetPlayerPawn(this,0);
+	
 
 	AMy_MainGameMode* MyGameMode =Cast<AMy_MainGameMode>(UGameplayStatics::GetGameMode(this));
 	
 	if (MyGameMode)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("my game mode alındı hacı dayı"));
-		
-		int32 RandomIndex = FMath::RandRange(0,MyGameMode->GetNpcAreas().Num()-1);
-		UE_LOG(LogTemp, Warning, TEXT("random int im seçildi dayı %d"),RandomIndex);
-		
+		int32 RandomIndex = FMath::RandRange(0,MyGameMode->GetNpcAreas().Num()-1);								//select a random npc area 
 		AMy_NpcAreas* SelectedArea = Cast<AMy_NpcAreas>(MyGameMode->GetNpcAreas()[RandomIndex]);
-
-		for (auto npcAreaActor : MyGameMode->GetNpcAreas())
+		
+		if (!SelectedArea->GetIsAreaBusy())
 		{
-			UE_LOG(LogTemp, Warning, TEXT("npc area %s"), *npcAreaActor->GetName());
+			GetBlackboardComponent()->SetValueAsVector("MoveToLocation", SelectedArea -> GetCustomerStandPoint()->GetComponentLocation());
+			SelectedArea->ACustomerArrived(this);
 		}
-
-		UE_LOG(LogTemp, Warning, TEXT("seçilen locasyon %s"),*SelectedArea->GetCustomerStandPoint().GetLocation().ToString());
-		GetBlackboardComponent()->SetValueAsVector("MoveToLocation", SelectedArea -> GetCustomerStandPoint().GetLocation());
+		else
+		{
+			FVector test = SelectedArea -> GetCustomerStandPoint()->GetComponentLocation() + SelectedArea->GetCustomerStandPoint()->GetForwardVector() * -160 * SelectedArea->GetNumOfCustomersInQueue();
+			UE_LOG(LogTemp, Warning, TEXT("masa doluuuuuu seçilen locasyon %s"),*test.ToString());
+			UE_LOG(LogTemp, Warning, TEXT("queue size  %d"),SelectedArea->GetNumOfCustomersInQueue());
+			GetBlackboardComponent()->SetValueAsVector("MoveToLocation", test);
+		}
 		
 	}
 	
 	
 	
+}
+
+UBehaviorTree* AMy_AIController::GetBehaviourTree()
+{
+	return BehaviorTree;
 }

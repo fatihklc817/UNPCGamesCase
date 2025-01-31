@@ -194,30 +194,37 @@ void AUNPCGamesCaseCharacter::DropLastItem()
 
 void AUNPCGamesCaseCharacter::UseFirstItem()
 {
-	if (!Inventory.IsValidIndex(0))
-	{
-		return;
-	}
-	auto SlotItemClass =	Inventory[0].ItemClassForUse;
-	
-	auto SpawnedActor= GetWorld()->SpawnActor<AMy_UsableInventoryItem>(SlotItemClass,FVector::ZeroVector,FRotator::ZeroRotator);	
-	SpawnedActor->Use();
-	SpawnedActor->Destroy();
-	Inventory.RemoveAt(0);
-	OnInventoryUpdated.Broadcast();
+	GetDataAndUseItemAtIndex(0);
 }
 
 void AUNPCGamesCaseCharacter::UseSecondItem()
 {
-
+	GetDataAndUseItemAtIndex(1);
 }
 
 void AUNPCGamesCaseCharacter::UseThirdItem()
 {
-	
+	GetDataAndUseItemAtIndex(2);
 }
 
 void AUNPCGamesCaseCharacter::UseFourthItem()
 {
-	
+	GetDataAndUseItemAtIndex(3);
 }
+
+void AUNPCGamesCaseCharacter::GetDataAndUseItemAtIndex(int32 Index)
+{
+	if (!Inventory.IsValidIndex(Index))
+	{
+		return;
+	}
+	auto SlotItemClass =	Inventory[Index].ItemClassForUse;
+	
+	auto SpawnedActor= GetWorld()->SpawnActor<AMy_UsableInventoryItem>(SlotItemClass,FVector::ZeroVector,FRotator::ZeroRotator);	
+	SpawnedActor->Use();
+	SpawnedActor->Destroy();
+	Inventory.RemoveAt(Index);
+	OnInventoryUpdated.Broadcast();
+}
+
+

@@ -108,6 +108,8 @@ protected:
 	void UseThirdItem();
 	void UseFourthItem();
 
+	void GetDataAndUseItemAtIndex(int32 Index);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;

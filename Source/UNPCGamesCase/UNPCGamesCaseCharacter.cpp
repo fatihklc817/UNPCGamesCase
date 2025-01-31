@@ -118,6 +118,18 @@ TArray<FItemStruct> AUNPCGamesCaseCharacter::GetInventory()
 	return Inventory;
 }
 
+AMy_BaseIncteractableNpc* AUNPCGamesCaseCharacter::GetLastInteractedNpc()
+{
+	return LastInteractedNPC;
+}
+
+void AUNPCGamesCaseCharacter::SetLastInteractedNpc(AMy_BaseIncteractableNpc* NPCRef)
+{
+	LastInteractedNPC = NPCRef;
+}
+
+
+
 
 void AUNPCGamesCaseCharacter::Move(const FInputActionValue& Value)
 {
@@ -175,7 +187,7 @@ void AUNPCGamesCaseCharacter::Interact()
 		}
 	}
 
-	DrawDebugLine(GetWorld(),StartPos,EndPosition,FColor::Red,false,5,0,5);
+	//DrawDebugLine(GetWorld(),StartPos,EndPosition,FColor::Red,false,5,0,5);
 }
 
 void AUNPCGamesCaseCharacter::DropLastItem()

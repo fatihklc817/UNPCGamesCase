@@ -58,6 +58,6 @@ public:
 
 	TArray<FVector>& GetQueueLocations();
 
-	TArray<APawn*> GetCustomersQueueArray();
+	TArray<APawn*>& GetCustomersQueueArray();
 
 };

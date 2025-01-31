@@ -61,12 +61,14 @@ int32 AMy_NpcAreas::GetNumOfCustomersInQueue()
 void AMy_NpcAreas::Interact(APawn* InstigatorPawn)
 {
 	UE_LOG(LogTemp, Warning, TEXT("%s is Interacted"),*InstigatorPawn->GetName());
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("%s is Interacted"), *InstigatorPawn->GetName()));
 	return;
 }
 
 void AMy_NpcAreas::IncrementQueueSize(APawn* ArrivedNPC)
 {
 	CustomersQueueArray.Add(ArrivedNPC);
+	
 	
 }
 
@@ -75,7 +77,7 @@ TArray<FVector>& AMy_NpcAreas::GetQueueLocations()
 	return QueueLocations;
 }
 
-TArray<APawn*> AMy_NpcAreas::GetCustomersQueueArray()
+TArray<APawn*>& AMy_NpcAreas::GetCustomersQueueArray()
 {
 	return CustomersQueueArray;
 }

@@ -46,17 +46,21 @@ EBTNodeResult::Type UMy_BTTask_FindAndGoToAreaPoint::ExecuteTask(UBehaviorTreeCo
 			int32 CharQueueIndex = BlackboardComponent->GetValueAsInt(QueueIndexKey.SelectedKeyName);
 			
 			TArray<FVector>& QueueLocations = SelectedArea->GetQueueLocations();
-			UE_LOG(LogTemp, Warning, TEXT("CHAR QUEUE INDEX %d"),CharQueueIndex);
-			UE_LOG(LogTemp, Warning, TEXT("QUEUE LOCATIONS NUM %d"),QueueLocations.Num());
-			if (CharQueueIndex >= QueueLocations.Num())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("yeni nokta oluşturulduuu"));
-				FVector CalculatedNewPoint = SelectedArea -> GetCustomerStandPoint()->GetComponentLocation() + SelectedArea->GetCustomerStandPoint()->GetForwardVector() * -200 * CharQueueIndex;
-				QueueLocations.Add(CalculatedNewPoint);
-				TargetLocation = QueueLocations[CharQueueIndex];
+			
+			if (CharQueueIndex >= SelectedArea->GetQueueLocations().Num()) {
+				FVector CalculatedNewPoint = SelectedArea->GetCustomerStandPoint()->GetComponentLocation() + SelectedArea->GetCustomerStandPoint()->GetForwardVector() * -200 * CharQueueIndex;
+				SelectedArea->GetQueueLocations().Add(CalculatedNewPoint);
+			
+				TargetLocation = CalculatedNewPoint;
 			}
 			else
 			{
+				if (CharQueueIndex == -1)
+				{
+					CharQueueIndex = SelectedArea->GetNumOfCustomersInQueue();
+					BlackboardComponent->SetValueAsInt(QueueIndexKey.SelectedKeyName, CharQueueIndex);
+				}
+				
 				TargetLocation = QueueLocations[CharQueueIndex];
 				UE_LOG(LogTemp, Warning, TEXT("var olan noktaya gidildi"));
 			}

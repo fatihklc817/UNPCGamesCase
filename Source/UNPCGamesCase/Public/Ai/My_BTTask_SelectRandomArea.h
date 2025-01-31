@@ -25,6 +25,12 @@ class UNPCGAMESCASE_API UMy_BTTask_SelectRandomArea : public UBTTaskNode
 
 	UPROPERTY(EditAnywhere, Category="Ai")
 	FBlackboardKeySelector IsAreaSelectedKey;
+
+	UPROPERTY(EditAnywhere, Category="Ai")
+	FBlackboardKeySelector MoveToLocationKey;
+
+	UPROPERTY(EditAnywhere, Category="Ai")
+	FBlackboardKeySelector QueueIndexKey;
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	

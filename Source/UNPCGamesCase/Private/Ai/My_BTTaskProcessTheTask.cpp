@@ -13,6 +13,7 @@ EBTNodeResult::Type UMy_BTTaskProcessTheTask::ExecuteTask(UBehaviorTreeComponent
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
 
 	auto SelectedArea =Cast<AMy_NpcAreas>(BlackboardComponent->GetValueAsObject(SelectedAreaKey.SelectedKeyName));
+	
 	if (SelectedArea)
 	{
 		if (SelectedArea->Implements<UMy_InteractInterface>())

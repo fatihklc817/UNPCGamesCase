@@ -67,6 +67,9 @@ class AUNPCGamesCaseCharacter : public ACharacter
 
 	UPROPERTY(BlueprintAssignable)
 	FOnInventoryUpdated OnInventoryUpdated;
+
+	UPROPERTY()
+	class AMy_BaseIncteractableNpc* LastInteractedNPC;
 	
 public:
 	AUNPCGamesCaseCharacter();
@@ -125,6 +128,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	TArray<FItemStruct> GetInventory();
+
+	UFUNCTION(BlueprintCallable)
+	AMy_BaseIncteractableNpc* GetLastInteractedNpc();
+
+	UFUNCTION(BlueprintCallable)
+	void SetLastInteractedNpc(AMy_BaseIncteractableNpc* NPCRef);
 
 };
 

@@ -23,7 +23,12 @@ class UNPCGAMESCASE_API AMy_MainGameMode : public AGameModeBase
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<class AMy_AICharacter> AiClass;
 
-	FTimerHandle TimerHandle_AiSPawn;				
+	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<class AMy_BaseIncteractableNpc>> NpcClasses;
+	
+	FTimerHandle TimerHandle_AiSPawn;
+	
+	FTimerHandle TimerHandle_NpcPawn;				
 
 	UPROPERTY(EditDefaultsOnly)
 	float SpawnAiSecondRange_MinValue;						//the min value for AI spawning second range 

@@ -4,22 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "My_BTTaskProcessTheTask.generated.h"
+#include "My_BTTaskRemoveAiFromQueue.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class UNPCGAMESCASE_API UMy_BTTaskProcessTheTask : public UBTTaskNode
+class UNPCGAMESCASE_API UMy_BTTaskRemoveAiFromQueue : public UBTTaskNode
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere,Category="Ai")
+	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector SelectedAreaKey;
 
-	UPROPERTY(EditAnywhere,Category="Ai")
-	FBlackboardKeySelector bIstTheTaskDoneKey;
+	UPROPERTY(EditAnywhere)
+	FBlackboardKeySelector QueueIndexKey;
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	
 };

@@ -19,6 +19,12 @@ class UNPCGAMESCASE_API UMy_BTTask_FindAndGoToAreaPoint : public UBTTaskNode
 
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector MoveToLocationKey;
+
+	UPROPERTY(EditAnywhere)
+	FBlackboardKeySelector QueueIndexKey;
+
+	UPROPERTY(EditAnywhere)
+	FBlackboardKeySelector bIsIndexSettedKey;
 	
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

@@ -9,6 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "My_InteractableBaseActor.h"
+#include "My_UsableInventoryItem.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -38,6 +40,8 @@ AUNPCGamesCaseCharacter::AUNPCGamesCaseCharacter()
 	Mesh1P->CastShadow = false;
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+
+	
 
 }
 
@@ -73,11 +77,45 @@ void AUNPCGamesCaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUNPCGamesCaseCharacter::Look);
+
+		//Interact
+		EnhancedInputComponent->BindAction(InteractAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::Interact);
+
+		//drop last imte
+		EnhancedInputComponent->BindAction(DropLastItemAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::DropLastItem);
+
+		//use items
+		EnhancedInputComponent->BindAction(UseFirstItemAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::UseFirstItem);
+		EnhancedInputComponent->BindAction(UseSecondItemAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::UseSecondItem);
+		EnhancedInputComponent->BindAction(UseThirdItemAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::UseThirdItem);
+		EnhancedInputComponent->BindAction(UseFourthItemAction,ETriggerEvent::Started,this,&AUNPCGamesCaseCharacter::UseFourthItem);
+		
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AUNPCGamesCaseCharacter::AddToInventory(FItemStruct ItemStruct)
+{
+	if (Inventory.Num() >= 4 )
+	{
+		return;
+	}
+	Inventory.Add(ItemStruct);
+
+	for (auto Element : Inventory)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("item : %s"),*Element.Name.ToString());
+	}
+
+	OnInventoryUpdated.Broadcast();
+}
+
+TArray<FItemStruct> AUNPCGamesCaseCharacter::GetInventory()
+{
+	return Inventory;
 }
 
 
@@ -115,4 +153,71 @@ void AUNPCGamesCaseCharacter::SetHasRifle(bool bNewHasRifle)
 bool AUNPCGamesCaseCharacter::GetHasRifle()
 {
 	return bHasRifle;
+}
+
+
+void AUNPCGamesCaseCharacter::Interact()
+{
+	FVector StartPos = GetFirstPersonCameraComponent()->GetComponentLocation();
+	FRotator Rotation = GetControlRotation();
+
+	FVector EndPosition = StartPos + Rotation.Vector() * 1000;
+
+	FHitResult HitResult;
+	FCollisionQueryParams params;
+	params.AddIgnoredActor(this);
+	if (GetWorld()->LineTraceSingleByChannel(HitResult,StartPos,EndPosition,ECC_Visibility,params))
+	{
+		if (HitResult.GetActor()->Implements<UMy_InteractInterface>())
+		{
+			auto InteractInterface = Cast<IMy_InteractInterface>(HitResult.GetActor());
+			InteractInterface->Interact(this);
+		}
+	}
+
+	DrawDebugLine(GetWorld(),StartPos,EndPosition,FColor::Red,false,5,0,5);
+}
+
+void AUNPCGamesCaseCharacter::DropLastItem()
+{
+	if (Inventory.Num() <= 0)
+	{
+		return;
+	}
+	
+	GetWorld()->SpawnActor<AActor>(Inventory[Inventory.Num()-1].ItemClassForSpawn,GetActorLocation(),FRotator::ZeroRotator);
+	
+	Inventory.RemoveAt(Inventory.Num()-1);
+	OnInventoryUpdated.Broadcast();
+
+}
+
+void AUNPCGamesCaseCharacter::UseFirstItem()
+{
+	if (!Inventory.IsValidIndex(0))
+	{
+		return;
+	}
+	auto SlotItemClass =	Inventory[0].ItemClassForUse;
+	
+	auto SpawnedActor= GetWorld()->SpawnActor<AMy_UsableInventoryItem>(SlotItemClass,FVector::ZeroVector,FRotator::ZeroRotator);	
+	SpawnedActor->Use();
+	SpawnedActor->Destroy();
+	Inventory.RemoveAt(0);
+	OnInventoryUpdated.Broadcast();
+}
+
+void AUNPCGamesCaseCharacter::UseSecondItem()
+{
+
+}
+
+void AUNPCGamesCaseCharacter::UseThirdItem()
+{
+	
+}
+
+void AUNPCGamesCaseCharacter::UseFourthItem()
+{
+	
 }

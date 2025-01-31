@@ -12,28 +12,66 @@ EBTNodeResult::Type UMy_BTTask_FindAndGoToAreaPoint::ExecuteTask(UBehaviorTreeCo
 {
 
 		UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
+		auto OwningActor = Cast<AController>(OwnerComp.GetOwner())->GetPawn();
 	
 		auto SelectedArea = Cast<AMy_NpcAreas>(BlackboardComponent->GetValueAsObject(SelectedAreaKey.SelectedKeyName));
 
 		if (!ensure(SelectedArea)) return EBTNodeResult::Failed;
-		
-		if (!SelectedArea->GetIsAreaBusy())
+
+		if (SelectedArea->GetCustomersQueueArray().Num() == 0)
 		{
-			
+			BlackboardComponent->SetValueAsInt(QueueIndexKey.SelectedKeyName, 0);
+		}
+	
+		if (!SelectedArea->GetIsAreaBusy() && BlackboardComponent->GetValueAsInt(QueueIndexKey.SelectedKeyName) == 0)
+		{
+			if (!SelectedArea->GetCustomersQueueArray().Contains(OwningActor))
+			{
+				SelectedArea->IncrementQueueSize(OwningActor);
+			}
 			BlackboardComponent->SetValueAsVector(MoveToLocationKey.SelectedKeyName, SelectedArea -> GetCustomerStandPoint()->GetComponentLocation());
-			SelectedArea->ACustomerArrived(OwnerComp.GetOwner());
+			SelectedArea->ACustomerArrivedToInside(OwningActor);
 			return EBTNodeResult::Succeeded;
 		}
 		else
 		{
-			FVector test = SelectedArea -> GetCustomerStandPoint()->GetComponentLocation() + SelectedArea->GetCustomerStandPoint()->GetForwardVector() * -200 * SelectedArea->GetNumOfCustomersInQueue();
-			UE_LOG(LogTemp, Warning, TEXT("masa doluuuuuu seçilen locasyon %s"),*test.ToString());
-			UE_LOG(LogTemp, Warning, TEXT("queue size  %d"),SelectedArea->GetNumOfCustomersInQueue());
-			BlackboardComponent->SetValueAsVector(MoveToLocationKey.SelectedKeyName, test);
-			if (SelectedArea->GetNumOfCustomersInQueue() == 0)
+			if (!BlackboardComponent->GetValueAsBool(bIsIndexSettedKey.SelectedKeyName))
 			{
-				SelectedArea->ACustomerArrived(OwnerComp.GetOwner());
+				int32 CharQueueIndex = SelectedArea->GetNumOfCustomersInQueue();
+				BlackboardComponent->SetValueAsInt(QueueIndexKey.SelectedKeyName, CharQueueIndex);
+				BlackboardComponent->SetValueAsBool(bIsIndexSettedKey.SelectedKeyName,true);
 			}
+
+			FVector TargetLocation;
+			int32 CharQueueIndex = BlackboardComponent->GetValueAsInt(QueueIndexKey.SelectedKeyName);
+			
+			TArray<FVector>& QueueLocations = SelectedArea->GetQueueLocations();
+			UE_LOG(LogTemp, Warning, TEXT("CHAR QUEUE INDEX %d"),CharQueueIndex);
+			UE_LOG(LogTemp, Warning, TEXT("QUEUE LOCATIONS NUM %d"),QueueLocations.Num());
+			if (CharQueueIndex >= QueueLocations.Num())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("yeni nokta oluşturulduuu"));
+				FVector CalculatedNewPoint = SelectedArea -> GetCustomerStandPoint()->GetComponentLocation() + SelectedArea->GetCustomerStandPoint()->GetForwardVector() * -200 * CharQueueIndex;
+				QueueLocations.Add(CalculatedNewPoint);
+				TargetLocation = QueueLocations[CharQueueIndex];
+			}
+			else
+			{
+				TargetLocation = QueueLocations[CharQueueIndex];
+				UE_LOG(LogTemp, Warning, TEXT("var olan noktaya gidildi"));
+			}
+			
+			UE_LOG(LogTemp, Warning, TEXT("masa doluydu ve seçilen yeni locasyon %s"),*TargetLocation.ToString());
+			BlackboardComponent->SetValueAsVector(MoveToLocationKey.SelectedKeyName, TargetLocation);
+			
+			if (!SelectedArea->GetCustomersQueueArray().Contains(OwningActor))
+			{
+				SelectedArea->IncrementQueueSize(OwningActor);
+			}
+			
+			
+			
+			
 			return EBTNodeResult::Succeeded;
 		}
 		

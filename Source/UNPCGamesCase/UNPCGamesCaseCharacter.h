@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "My_ItemStruct.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "UNPCGamesCaseCharacter.generated.h"
@@ -15,6 +16,8 @@ class UInputMappingContext;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
 
 UCLASS(config=Game)
 class AUNPCGamesCaseCharacter : public ACharacter
@@ -40,6 +43,30 @@ class AUNPCGamesCaseCharacter : public ACharacter
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* DropLastItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* UseFirstItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* UseSecondItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* UseThirdItemAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
+	UInputAction* UseFourthItemAction;
+	
+	UPROPERTY(EditAnywhere)
+	TArray<FItemStruct> Inventory;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnInventoryUpdated OnInventoryUpdated;
 	
 public:
 	AUNPCGamesCaseCharacter();
@@ -72,6 +99,15 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void Interact();
+
+	void DropLastItem();
+
+	void UseFirstItem();
+	void UseSecondItem();
+	void UseThirdItem();
+	void UseFourthItem();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -82,6 +118,11 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	void AddToInventory(FItemStruct ItemStruct);
+
+	UFUNCTION(BlueprintCallable)
+	TArray<FItemStruct> GetInventory();
 
 };
 

@@ -4,6 +4,7 @@
 #include "My_NpcAreas.h"
 
 #include "Components/ArrowComponent.h"
+#include "GameFramework/Character.h"
 
 
 AMy_NpcAreas::AMy_NpcAreas()
@@ -17,6 +18,8 @@ AMy_NpcAreas::AMy_NpcAreas()
 	CustomerStandPoint->SetupAttachment(RootComponent);
 
 	bIsAreaBusy = false;
+
+	QueueLocations.Add(CustomerStandPoint->GetComponentLocation());
 	
 }
 
@@ -43,22 +46,38 @@ void AMy_NpcAreas::SetIsAreaBusy(bool value)
 	bIsAreaBusy = value;
 }
 
-void AMy_NpcAreas::ACustomerArrived(AActor* ArrivedNPC)
+void AMy_NpcAreas::ACustomerArrivedToInside(AActor* ArrivedNPC)
 {
 	SetIsAreaBusy(true);
-	CustomersQueue.Enqueue(ArrivedNPC);
-	QueueSize++;
-	
 }
 
-void AMy_NpcAreas::CurrentCustomerDoneItsTask()
-{
-	QueueSize--;
-}
+
 
 int32 AMy_NpcAreas::GetNumOfCustomersInQueue()
 {
-	return QueueSize;
+	return CustomersQueueArray.Num();
+}
+
+void AMy_NpcAreas::Interact(APawn* InstigatorPawn)
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s is Interacted"),*InstigatorPawn->GetName());
+	return;
+}
+
+void AMy_NpcAreas::IncrementQueueSize(APawn* ArrivedNPC)
+{
+	CustomersQueueArray.Add(ArrivedNPC);
+	
+}
+
+TArray<FVector>& AMy_NpcAreas::GetQueueLocations()
+{
+	return QueueLocations;
+}
+
+TArray<APawn*> AMy_NpcAreas::GetCustomersQueueArray()
+{
+	return CustomersQueueArray;
 }
 
 

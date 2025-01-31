@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/My_InteractInterface.h"
 #include "My_NpcAreas.generated.h"
 
 UCLASS()
-class UNPCGAMESCASE_API AMy_NpcAreas : public AActor
+class UNPCGAMESCASE_API AMy_NpcAreas : public AActor , public IMy_InteractInterface
 {
 	GENERATED_BODY()
 
@@ -25,9 +26,11 @@ protected:
 	bool bIsAreaBusy;
 
 	//to store the queue of customers
+	UPROPERTY()
+	TArray<APawn*> CustomersQueueArray;
+	
 
-	TQueue<AActor*> CustomersQueue;
-	int32 QueueSize;
+	TArray<FVector> QueueLocations;
 
 	
 	
@@ -43,10 +46,18 @@ public:
 	bool GetIsAreaBusy();
 	void SetIsAreaBusy(bool value);
 
-	void ACustomerArrived(AActor* ArrivedNPC);
-
-	void CurrentCustomerDoneItsTask();
+	void ACustomerArrivedToInside(AActor* ArrivedNPC);
+	
 
 	int32 GetNumOfCustomersInQueue();
+
+	//Interface
+	virtual void Interact(APawn* InstigatorPawn) override;
+
+	void IncrementQueueSize(APawn* ArrivedNPC);
+
+	TArray<FVector>& GetQueueLocations();
+
+	TArray<APawn*> GetCustomersQueueArray();
 
 };

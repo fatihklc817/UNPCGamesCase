@@ -18,6 +18,7 @@ class UNPCGAMESCASE_API AMy_BaseIncteractableNpc : public ACharacter, public IMy
 	UPROPERTY()
 	UUserWidget* CreatedNpcWidget;
 
+	//ui için metinler
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,meta=(AllowPrivateAccess=true))
 	FString Task1String;
 

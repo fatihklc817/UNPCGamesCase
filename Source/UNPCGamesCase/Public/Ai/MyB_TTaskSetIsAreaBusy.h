@@ -14,6 +14,8 @@ class UNPCGAMESCASE_API UMyB_TTaskSetIsAreaBusy : public UBTTaskNode
 {
 	GENERATED_BODY()
 
+	//DELETE IT // WRONG CLASS // NOT USED 
+	
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector QueueIndexKey;
 

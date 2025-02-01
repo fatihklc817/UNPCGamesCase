@@ -61,10 +61,12 @@ class AUNPCGamesCaseCharacter : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* UseFourthItemAction;
-	
+
+	//Hotbar için 4 slotluk bir envanter
 	UPROPERTY(EditAnywhere)
 	TArray<FItemStruct> Inventory;
 
+	//ui guncellemek için event 
 	UPROPERTY(BlueprintAssignable)
 	FOnInventoryUpdated OnInventoryUpdated;
 
@@ -104,6 +106,8 @@ protected:
 
 	void Interact();
 
+
+	//envanter fonksiyonları
 	void DropLastItem();
 
 	void UseFirstItem();
@@ -124,6 +128,7 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	//envantere item ekleme fonc.
 	void AddToInventory(FItemStruct ItemStruct);
 
 	UFUNCTION(BlueprintCallable)

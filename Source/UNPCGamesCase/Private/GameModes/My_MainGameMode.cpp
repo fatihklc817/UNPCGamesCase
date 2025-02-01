@@ -57,8 +57,6 @@ void AMy_MainGameMode::BeginPlay()
 
 
 	//rastgele npc spawnla
-	
-	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle_NpcPawn,
 			[this]()
 			{

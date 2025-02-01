@@ -97,7 +97,7 @@ void AUNPCGamesCaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerI
 	}
 }
 
-void AUNPCGamesCaseCharacter::AddToInventory(FItemStruct ItemStruct)
+void AUNPCGamesCaseCharacter::AddToInventory(FItemStruct ItemStruct)													//struct yapısı olarak gelen itemi envantere ekler
 {
 	if (Inventory.Num() >= 4 )
 	{
@@ -168,7 +168,7 @@ bool AUNPCGamesCaseCharacter::GetHasRifle()
 }
 
 
-void AUNPCGamesCaseCharacter::Interact()
+void AUNPCGamesCaseCharacter::Interact()																				//interact function raycast and if implementing interface call it
 {
 	FVector StartPos = GetFirstPersonCameraComponent()->GetComponentLocation();
 	FRotator Rotation = GetControlRotation();
@@ -190,7 +190,7 @@ void AUNPCGamesCaseCharacter::Interact()
 	//DrawDebugLine(GetWorld(),StartPos,EndPosition,FColor::Red,false,5,0,5);
 }
 
-void AUNPCGamesCaseCharacter::DropLastItem()
+void AUNPCGamesCaseCharacter::DropLastItem()																			//this func is dropping last item in inventroy 
 {
 	if (Inventory.Num() <= 0)
 	{
@@ -204,8 +204,8 @@ void AUNPCGamesCaseCharacter::DropLastItem()
 
 }
 
-void AUNPCGamesCaseCharacter::UseFirstItem()
-{
+void AUNPCGamesCaseCharacter::UseFirstItem()																			//for using inventory items 1,2,3,4
+{	
 	GetDataAndUseItemAtIndex(0);
 }
 
@@ -224,7 +224,7 @@ void AUNPCGamesCaseCharacter::UseFourthItem()
 	GetDataAndUseItemAtIndex(3);
 }
 
-void AUNPCGamesCaseCharacter::GetDataAndUseItemAtIndex(int32 Index)
+void AUNPCGamesCaseCharacter::GetDataAndUseItemAtIndex(int32 Index)														//this func is getting item data with given index and // then calls item use() func // then destroy item 
 {
 	if (!Inventory.IsValidIndex(Index))
 	{

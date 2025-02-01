@@ -9,6 +9,11 @@
 
 EBTNodeResult::Type UMyB_TTaskSetIsAreaBusy::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
+
+	//this classs iss wronnnggg UNUSED !!!
+
+
+	
 	auto OwningActor = Cast<AMy_AIController>(OwnerComp.GetOwner())->GetPawn();
 	auto BlackboardComp = OwnerComp.GetBlackboardComponent();
 	if (BlackboardComp->GetValueAsInt(QueueIndexKey.SelectedKeyName) == 0)

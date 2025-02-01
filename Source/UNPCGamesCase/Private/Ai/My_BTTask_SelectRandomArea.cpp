@@ -17,7 +17,7 @@ EBTNodeResult::Type UMy_BTTask_SelectRandomArea::ExecuteTask(UBehaviorTreeCompon
 
 	BlackboardComponent->SetValueAsInt(QueueIndexKey.SelectedKeyName,9999);
 	BlackboardComponent->SetValueAsVector(SpawnLocationKey.SelectedKeyName,OwningActor->GetActorLocation());
-	//UE_LOG(LogTemp, Warning, TEXT("spawn location setlendi %s"),*BlackboardComponent->GetValueAsVector(SpawnLocationKey.SelectedKeyName).ToString());  //log
+	
 	
 	AMy_MainGameMode* MyGameMode =Cast<AMy_MainGameMode>(UGameplayStatics::GetGameMode(this));
 
@@ -31,7 +31,7 @@ EBTNodeResult::Type UMy_BTTask_SelectRandomArea::ExecuteTask(UBehaviorTreeCompon
 			BlackboardComponent->SetValueAsObject(SelectedAreaKey.SelectedKeyName,SelectedArea);						//assign it to blackboard data
 			BlackboardComponent->SetValueAsBool(IsAreaSelectedKey.SelectedKeyName,true);
 			
-			//UE_LOG(LogTemp, Warning, TEXT("selected area is setlendi : %s "),*SelectedArea->GetName());			//log
+			
 			
 			BlackboardComponent->SetValueAsVector(AreaLocationKey.SelectedKeyName,SelectedArea->GetCustomerStandPoint()->GetComponentLocation());
 			

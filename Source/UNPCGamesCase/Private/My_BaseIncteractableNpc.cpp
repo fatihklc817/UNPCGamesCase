@@ -13,6 +13,8 @@ AMy_BaseIncteractableNpc::AMy_BaseIncteractableNpc()
 
 	PrimaryActorTick.bCanEverTick = false;
 
+
+	//random şekilde değişkenleri setliyoruz
 	Health = FMath::RandRange(50,500);
 	IsCool = FMath::RandBool();
 	Age = FMath::RandRange(20,100);

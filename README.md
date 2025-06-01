@@ -1,4 +1,6 @@
 Contained Mechanics
+
+
 Interaction System
 A system that allows the player to interact with objects and NPCs in the environment.
 
